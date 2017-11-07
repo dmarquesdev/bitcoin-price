@@ -19,7 +19,9 @@
   "homepage": "https://github.com/dmarquesdev/bitcoin-price#readme",
   "dependencies": {
     "axios": "^0.17.0",
+    "bootstrap": "^3.3.7",
     "express": "^4.16.2",
+    "font-awesome": "^4.7.0",
     "i18next": "^10.0.7",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
