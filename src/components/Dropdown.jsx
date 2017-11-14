@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const mapListToOptions = (list, key, label) => {
     return list.map((elem, i) => {
-        return <option value={elem[key]}>{elem[label]}</option>
+        return <option key={elem[key]} value={elem[key]}>{elem[label]}</option>
     });
 }
 
@@ -11,7 +11,7 @@ const Dropdown = ({ items, onChange, currentValue, itemKey, itemLabel }) => (
     <select
         className="form-control"
         value={currentValue}
-        onChange
+        onChange={onChange}
     >
         {mapListToOptions(items, itemKey, itemLabel)}
     </select>
@@ -20,13 +20,13 @@ const Dropdown = ({ items, onChange, currentValue, itemKey, itemLabel }) => (
 Dropdown.propTypes = {
     items: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
-    currentValue: PropTypes.object.isRequired,
+    currentValue: PropTypes.string.isRequired,
     itemKey: PropTypes.string,
     itemLabel: PropTypes.string
 };
 
 Dropdown.defaultProps = {
-    itemKey: 'id',
+    itemKey: 'code',
     itemLabel: 'name'
 };
 
