@@ -13,17 +13,24 @@ import {
 const INITIAL_STATE = {
     from: {
         code: 'BTC',
-        name: 'Bitcoin'
+        name: 'Bitcoin',
+        image: '/media/19633/btc.png',
+        price: 1
     },
     to: {
         code: 'BRL',
-        name: 'Real'
+        name: 'Real',
+        price: 23000
     },
     cryptoList: [],
     regularList: [
         {
             code: 'BRL',
             name: 'Real'
+        },
+        {
+            code: 'USD',
+            name: 'US Dollar'
         }
     ]
 };
@@ -36,13 +43,15 @@ const currencyReducer = (state = INITIAL_STATE, action) => {
             return { ...state, cryptoList: [] };
         case FETCH_PRICE_SUCCESS:
             const result = action.payload;
-            return { ...state, from: _.merge(state.from, result[0]), to: _.merge(state.to, result[1]) };
+            return { ...state, from: _.assignIn({}, state.from, result[0]), to: _.assignIn({}, state.to, result[1]) };
         case FETCH_PRICE_FAILURE:
             return { ...state, from: INITIAL_STATE.from, to: INITIAL_STATE.to };
         case SELECT_CURRENCY_FROM:
-            return { ...state, from: action.payload };
+            const from = _.find(state.cryptoList, { code: action.payload });
+            return { ...state, from: _.assignIn({}, state.from, from) };
         case SELECT_CURRENCY_TO:
-            return { ...state, to: action.payload };
+            const to = _.find(state.regularList, { code: action.payload });
+            return { ...state, to: _.assignIn({}, state.to, to) };
         default:
             return state;
     }

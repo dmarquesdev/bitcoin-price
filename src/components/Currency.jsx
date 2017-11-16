@@ -3,44 +3,33 @@ import PropTypes from 'prop-types';
 
 import Dropdown from './Dropdown';
 
-import { API_URL } from '../../config';
+import { MEDIA_API } from '../../config';
 
 class Currency extends PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = { value: (this.props.currency.price || 1) };
-        this.handleValueChange = this.handleValueChange.bind(this);
-    }
-
-    handleValueChange(event) {
-        this.setState({ value: event.target.value }); 
-        this.props.onValueChange(this.state.value);
-    }
-
     render() {
         const {
             currency,
             currencies,
-            onCurrencyChange,
-            onValueChange
+            onCurrencyChange
         } = this.props;
+
+        console.log(currency);
+
+        const image = currency.image !== undefined && (
+            <img src={`${MEDIA_API}${currency.image}`} />
+        );
+
         return (
             <div className="currency-container">
                 <h3>{currency.code}</h3>
-                <img src={`${API_URL}/${currency.image}`} />
+                {image}
                 <div className="currency-info">
                     <Dropdown
                         items={currencies}
                         onChange={onCurrencyChange}
                         currentValue={currency.code}
                     />
-                    <input
-                        className="currency-value"
-                        type="text"
-                        value={this.state.value}
-                        onChange={this.handleValueChange}
-                    />
+                    <h5>{currency.price}</h5>
                 </div>
             </div>
         );
@@ -50,8 +39,7 @@ class Currency extends PureComponent {
 Currency.propTypes = {
     currency: PropTypes.object.isRequired,
     currencies: PropTypes.array.isRequired,
-    onCurrencyChange: PropTypes.func.isRequired,
-    onValueChange: PropTypes.func.isRequired
+    onCurrencyChange: PropTypes.func.isRequired
 };
 
 export default Currency;

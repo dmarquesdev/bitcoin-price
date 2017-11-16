@@ -17,34 +17,38 @@ class Home extends PureComponent {
 
         this.handleFromCurrencyChange = this.handleFromCurrencyChange.bind(this);
         this.handleToCurrencyChange = this.handleToCurrencyChange.bind(this);
-        this.handleFromValueChange = this.handleFromValueChange.bind(this);
-        this.handleToValueChange = this.handleToValueChange.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.fetchCurrencies();
-        this.props.fetchPrice(1, this.props.from.code, this.props.to.code);
+        this.props.fetchPrice(this.props.from.code, this.props.to.code);
     }
 
     handleFromCurrencyChange(event) {
-        console.log(event.target.value);
+        this.props.selectCurrencyFrom(event.target.value);
+        this.props.fetchPrice(event.target.value, this.props.to.code);
     }
 
     handleToCurrencyChange(event) {
-        console.log('to currency changed');
-    }
-
-    handleFromValueChange(newValue) {
-        if (!isNaN(newValue)) {
-            this.props.fetchPrice(newValue, this.props.from.code, this.props.to.code);
-        }
-    }
-
-    handleToValueChange(newValue) {
-        console.log('to value changed');
+        this.props.selectCurrencyTo(event.target.value);
+        this.props.fetchPrice(this.props.from.code, event.target.value);
     }
 
     render() {
+        const fromComponent = this.props.from !== undefined && (
+            <Currency
+                currency={this.props.from}
+                currencies={this.props.cryptoCurrencies}
+                onCurrencyChange={this.handleFromCurrencyChange}
+            />
+        );
+        const toComponent = this.props.to !== undefined && (
+            <Currency
+                currency={this.props.to}
+                currencies={this.props.regularCurrencies}
+                onCurrencyChange={this.handleToCurrencyChange}
+            />
+        );
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -53,12 +57,7 @@ class Home extends PureComponent {
                     </div>
                     <div className="col-xs-12">
                         <div className="col-xs-12 col-md-4">
-                            <Currency
-                                currency={this.props.from}
-                                currencies={this.props.cryptoCurrencies}
-                                onCurrencyChange={this.handleFromCurrencyChange}
-                                onValueChange={this.handleFromValueChange}
-                            />
+                            {fromComponent}
                         </div>
                         <div className="col-xs-12 col-md-4">
                             <Icon
@@ -67,12 +66,7 @@ class Home extends PureComponent {
                             />
                         </div>
                         <div className="col-xs-12 col-md-4">
-                            <Currency
-                                currency={this.props.to}
-                                currencies={this.props.regularCurrencies}
-                                onCurrencyChange={this.handleToCurrencyChange}
-                                onValueChange={this.handleToValueChange}
-                            />
+                            {toComponent}
                         </div>
                     </div>
                 </div>

@@ -45,22 +45,21 @@ export const fetchCurrencies = () => (dispatch) => {
         });
 }
 
-export const fetchPrice = (value, from, to) => dispatch => {
+export const fetchPrice = (from, to) => dispatch => {
     dispatch({
         type: START_API_CALL
     });
-    let price = value || 1;
     axios
         .get(`${API_URL}/data/price?fsym=${from}&tsyms=${to}`)
         .then(response => {
             const data = [
                 {
                     code: from,
-                    price
+                    price: 1
                 },
                 {
                     code: to,
-                    price: value * response.data[to]
+                    price: response.data[to]
                 }
             ]
             dispatch({
