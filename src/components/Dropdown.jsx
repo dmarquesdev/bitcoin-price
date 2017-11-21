@@ -8,13 +8,15 @@ const mapListToOptions = (list, key, label) => {
 }
 
 const Dropdown = ({ items, onChange, currentValue, itemKey, itemLabel }) => (
-    <select
-        className="form-control"
-        value={currentValue}
-        onChange={onChange}
-    >
-        {mapListToOptions(items, itemKey, itemLabel)}
-    </select>
+    <div className="form-group">
+        <select
+            className="form-control dropdown"
+            value={currentValue}
+            onChange={onChange}
+        >
+            {mapListToOptions(items, itemKey, itemLabel)}
+        </select>
+    </div>
 );
 
 Dropdown.propTypes = {

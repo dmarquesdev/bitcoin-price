@@ -1,3 +1,28 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 $fa-font-path: "~font-awesome/fonts";
 @import '~font-awesome/scss/font-awesome.scss';
+
+.title {
+    text-align: center;
+}
+
+.currency-container {
+    text-align: center;
+
+    .image {
+        width: 200px;
+        height: 200px;
+        margin: 30px auto;
+    }
+
+}
+
+.currency-info {
+    h5 {
+        font-size: 3em;
+    }
+}
+
+.footer {
+    text-align: center;
+}

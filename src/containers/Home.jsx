@@ -5,10 +5,11 @@ import Icon from '../components/Icon';
 import Currency from '../components/Currency';
 
 import {
-    fetchCurrencies,
+    fetchCryptoCurrencies,
     fetchPrice,
     selectCurrencyFrom,
-    selectCurrencyTo
+    selectCurrencyTo,
+    getUserLocation
 } from '../actions';
 
 class Home extends PureComponent {
@@ -20,7 +21,7 @@ class Home extends PureComponent {
     }
 
     componentDidMount() {
-        this.props.fetchCurrencies();
+        this.props.fetchCryptoCurrencies();
         this.props.fetchPrice(this.props.from.code, this.props.to.code);
     }
 
@@ -53,21 +54,20 @@ class Home extends PureComponent {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-xs-12">
-                        <h1>Quanto custa o Bitcoin?</h1>
+                        <h1 className="title">Quanto custa o Bitcoin?</h1>
                     </div>
                     <div className="col-xs-12">
-                        <div className="col-xs-12 col-md-4">
+                        <div className="col-xs-12 col-md-6">
                             {fromComponent}
                         </div>
-                        <div className="col-xs-12 col-md-4">
-                            <Icon
-                                name="exchange"
-                                onClick={() => {}}
-                            />
-                        </div>
-                        <div className="col-xs-12 col-md-4">
+                        <div className="col-xs-12 col-md-6">
                             {toComponent}
                         </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12 footer">
+                        <a href="https://github.com/dmarquesdev/bitcoin-price">GitHub</a>
                     </div>
                 </div>
             </div>
@@ -85,8 +85,9 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-    fetchCurrencies,
+    fetchCryptoCurrencies,
     fetchPrice,
     selectCurrencyFrom,
-    selectCurrencyTo
+    selectCurrencyTo,
+    getUserLocation
 })(Home);

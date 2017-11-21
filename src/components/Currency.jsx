@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Dropdown from './Dropdown';
 
-import { MEDIA_API } from '../../config';
-
 class Currency extends PureComponent {
     render() {
         const {
@@ -16,8 +14,13 @@ class Currency extends PureComponent {
         console.log(currency);
 
         const image = currency.image !== undefined && (
-            <img src={`${MEDIA_API}${currency.image}`} />
+            <img
+                src={currency.image}
+                className="image"
+            />
         );
+
+        const date = new Date().toString();
 
         return (
             <div className="currency-container">
@@ -29,6 +32,7 @@ class Currency extends PureComponent {
                         onChange={onCurrencyChange}
                         currentValue={currency.code}
                     />
+                    <h6>{date}</h6>
                     <h5>{currency.price}</h5>
                 </div>
             </div>
