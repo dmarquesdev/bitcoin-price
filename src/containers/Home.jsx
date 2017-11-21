@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import Icon from '../components/Icon';
 import Currency from '../components/Currency';
@@ -54,7 +55,11 @@ class Home extends PureComponent {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-xs-12">
-                        <h1 className="title">Quanto custa o Bitcoin?</h1>
+                        <h1 className="title">
+                            <FormattedMessage
+                                id="title"
+                            />
+                        </h1>
                     </div>
                     <div className="col-xs-12">
                         <div className="col-xs-12 col-md-6">
