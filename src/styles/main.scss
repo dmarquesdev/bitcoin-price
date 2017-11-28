@@ -26,3 +26,22 @@ $fa-font-path: "~font-awesome/fonts";
 .footer {
     text-align: center;
 }
+
+.overlay {
+    z-index: 9999999;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(252, 163, 104);
+    font-size: 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.__hidden {
+    display: none;
+}

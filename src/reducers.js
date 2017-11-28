@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { combineReducers } from 'redux';
+import { intlReducer } from 'react-intl-redux';
 
 import {
     FETCH_CURRENCIES_SUCCESS,
@@ -8,10 +9,38 @@ import {
     FETCH_PRICE_FAILURE,
     SELECT_CURRENCY_FROM,
     SELECT_CURRENCY_TO,
-    GET_USER_LOCATION_SUCCESS
+    START_API_CALL,
+    END_API_CALL
 } from './constants';
 
 import { MEDIA_URL } from '../config';
+
+const language = (navigator.languages && navigator.languages[0]) ||
+navigator.language ||
+navigator.userLanguage;
+
+const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
+
+const currencies = [
+    {
+        code: 'BRL',
+        regionCode: 'pt',
+        name: 'Real',
+        image: 'http://sincorgo.com.br/wp-content/uploads/2014/09/reais.jpg'
+    },
+    {
+        code: 'USD',
+        regionCode: 'us',
+        name: 'Dolar',
+        image: 'http://euqueru.net/wp-content/uploads/2010/08/dolar2.jpg'
+    },
+    {
+        code: 'EUR',
+        regionCode: 'es',
+        name: 'Euro',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Euro_coins_and_banknotes.jpg/220px-Euro_coins_and_banknotes.jpg'
+    }
+];
 
 const INITIAL_STATE = {
     from: {
@@ -20,26 +49,9 @@ const INITIAL_STATE = {
         image: `${MEDIA_URL}/media/19633/btc.png`,
         price: 1
     },
-    to: {
-        code: 'BRL',
-        name: 'Real',
-        image: 'http://sincorgo.com.br/wp-content/uploads/2014/09/reais.jpg',
-        price: 23000
-    },
+    to: _.find(currencies, c => c.regionCode === languageWithoutRegionCode),
     cryptoList: [],
-    regularList: [
-        {
-            code: 'BRL',
-            name: 'Real',
-            image: 'http://sincorgo.com.br/wp-content/uploads/2014/09/reais.jpg'
-        },
-        {
-            code: 'USD',
-            name: 'US Dollar',
-            image: 'https://2.bp.blogspot.com/_iC4-uGwan-s/TDcHjiuG-SI/AAAAAAAABmo/JLagbXPWwSA/s1600/United_States_one_dollar_bill,_obverse.jpg'
-        }
-    ],
-    location: 'BR' 
+    regularList: currencies
 };
 
 const currencyReducer = (state = INITIAL_STATE, action) => {
@@ -59,13 +71,28 @@ const currencyReducer = (state = INITIAL_STATE, action) => {
         case SELECT_CURRENCY_TO:
             const to = _.find(state.regularList, { code: action.payload });
             return { ...state, to: _.assignIn({}, state.to, to) };
-        case GET_USER_LOCATION_SUCCESS:
-            return { ...state, location: action.payload };
         default:
             return state;
     }
 };
 
+const apiState = {
+    isLoading: false
+};
+
+const apiReducer = (state = apiState, action) => {
+    switch(action.type) {
+        case START_API_CALL:
+            return { ...state, isLoading: true }
+        case END_API_CALL:
+            return { ...state, isLoading: false }
+        default:
+            return state
+    }
+};
+
 export default combineReducers({
-    currency: currencyReducer
+    currency: currencyReducer,
+    api: apiReducer,
+    intl: intlReducer
 });

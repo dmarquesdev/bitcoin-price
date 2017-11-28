@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import {
+    FormattedNumber,
+    FormattedDate
+} from 'react-intl';
 
 import Dropdown from './Dropdown';
 
@@ -8,10 +12,9 @@ class Currency extends PureComponent {
         const {
             currency,
             currencies,
-            onCurrencyChange
+            onCurrencyChange,
+            date
         } = this.props;
-
-        console.log(currency);
 
         const image = currency.image !== undefined && (
             <img
@@ -19,8 +22,6 @@ class Currency extends PureComponent {
                 className="image"
             />
         );
-
-        const date = new Date().toString();
 
         return (
             <div className="currency-container">
@@ -32,8 +33,18 @@ class Currency extends PureComponent {
                         onChange={onCurrencyChange}
                         currentValue={currency.code}
                     />
-                    <h6>{date}</h6>
-                    <h5>{currency.price}</h5>
+                    <h4>
+                        <FormattedDate
+                            value={date}
+                        />
+                    </h4>
+                    <h5>
+                        <FormattedNumber
+                            value={currency.price}
+                            style="currency"
+                            currency={currency.code}
+                        />
+                    </h5>
                 </div>
             </div>
         );

@@ -10,7 +10,7 @@ import {
     fetchPrice,
     selectCurrencyFrom,
     selectCurrencyTo,
-    getUserLocation
+    changeLanguage
 } from '../actions';
 
 class Home extends PureComponent {
@@ -19,11 +19,18 @@ class Home extends PureComponent {
 
         this.handleFromCurrencyChange = this.handleFromCurrencyChange.bind(this);
         this.handleToCurrencyChange = this.handleToCurrencyChange.bind(this);
+        this.onLanguageChange = this.onLanguageChange.bind(this);
+
+        this.state = { loading: false };
     }
 
     componentDidMount() {
         this.props.fetchCryptoCurrencies();
         this.props.fetchPrice(this.props.from.code, this.props.to.code);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ loading: nextProps.loading });
     }
 
     handleFromCurrencyChange(event) {
@@ -36,12 +43,17 @@ class Home extends PureComponent {
         this.props.fetchPrice(this.props.from.code, event.target.value);
     }
 
+    onLanguageChange(event) {
+        this.props.changeLanguage(event.target.value);
+    }
+
     render() {
         const fromComponent = this.props.from !== undefined && (
             <Currency
                 currency={this.props.from}
                 currencies={this.props.cryptoCurrencies}
                 onCurrencyChange={this.handleFromCurrencyChange}
+                date={new Date()}
             />
         );
         const toComponent = this.props.to !== undefined && (
@@ -49,8 +61,16 @@ class Home extends PureComponent {
                 currency={this.props.to}
                 currencies={this.props.regularCurrencies}
                 onCurrencyChange={this.handleToCurrencyChange}
+                date={new Date()}
             />
         );
+
+        let loadingClass = 'overlay';
+
+        if (!this.state.loading) {
+            loadingClass += ' __hidden';
+        }
+
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -60,6 +80,19 @@ class Home extends PureComponent {
                                 id="title"
                             />
                         </h1>
+                    </div>
+                    <div className="col-xs-12">
+                        <div className="col-xs-12 col-md-3 col-md-offset-9 col-lg-2 col-lg-offset-10">
+                            <select
+                                value={this.props.intl.locale}
+                                onChange={this.onLanguageChange}
+                                className="form-control"
+                            >
+                                <option value="pt">Português</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="col-xs-12">
                         <div className="col-xs-12 col-md-6">
@@ -75,6 +108,9 @@ class Home extends PureComponent {
                         <a href="https://github.com/dmarquesdev/bitcoin-price">GitHub</a>
                     </div>
                 </div>
+                <div className={loadingClass}>
+                    <i className="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                </div>
             </div>
         );
     }
@@ -85,7 +121,9 @@ const mapStateToProps = (state) => {
         from: state.currency.from,
         to: state.currency.to,
         cryptoCurrencies: state.currency.cryptoList,
-        regularCurrencies: state.currency.regularList
+        regularCurrencies: state.currency.regularList,
+        intl: state.intl,
+        loading: state.api.isLoading
     }
 }
 
@@ -94,5 +132,5 @@ export default connect(mapStateToProps, {
     fetchPrice,
     selectCurrencyFrom,
     selectCurrencyTo,
-    getUserLocation
+    changeLanguage
 })(Home);
